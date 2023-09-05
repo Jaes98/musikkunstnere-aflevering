@@ -53,9 +53,15 @@ app.post("/artists", async (request, response) => {
   artists.push(newArtist);
   console.log(newArtist);
 
-  fs.writeFile("data.json", JSON.stringify(artists));
-    if ()
-  response.json(artists);
+//   fs.writeFile("data.json", JSON.stringify(artists));
+      try {
+        await fs.writeFile("data.json", JSON.stringify(artists));
+        response.json(artists);
+      } catch (err) {
+        response.status(500).json({error: "Server could'nt handle"})
+        console.error("Error writing to file:", err);
+      }
+//   response.json(artists);
 });
 
 app.put("/artists/:id", async (request, response) => {
