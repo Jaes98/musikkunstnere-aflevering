@@ -22,5 +22,21 @@
     "latestAlbum": "Katy Perry album",
     "image": "Katy Perry image",
     "id": "739148192"
+  },
+  {
+    "name": "Eminem",
+    "birthday": "1990-01-01",
+    "genre": "Rap",
+    "latestAlbum": "Eminem album",
+    "image": "Eminem image",
+    "id": "739148933"
+  },
+  {
+    "name": "Travis Scott",
+    "birthday": "1990-01-01",
+    "genre": "Rap",
+    "latestAlbum": "Travis Scott album",
+    "image": "Travis Scott image",
+    "id": "739143512"
   }
 ]

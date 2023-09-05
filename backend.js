@@ -32,22 +32,22 @@ app.get("/artists", async (request, response) => {
     } 
 })
 app.post("/artists", async (request, response) => {
-    const newArtists = request.body;
-    newArtists.id = new Date().getTime();
-    console.log(newArtists);
+    const newArtist = request.body;
+    newArtist.id = new Date().getTime();
+    console.log(newArtist);
 
     const data = await fs.readFile("data.json");
     const artists = JSON.parse(data)
 
-    artists.push(newArtists);
-    console.log(newArtists);
+    artists.push(newArtist);
+    console.log(newArtist);
 
     fs.writeFile("data.json", JSON.stringify(artists));
 
     response.json(artists);
 });
 
-app.patch("/artists/:id", async (request, response) => {
+app.put("/artists/:id", async (request, response) => {
     const id = Number(request.params.id);
     console.log(id);
 
@@ -76,9 +76,9 @@ app.delete("/artists/:id", async (request, response) => {
     const data = await fs.readFile("data.json");
     const artists = JSON.parse(data);
 
-    const newartists = artists.filter(artist => artist.id !==id)
+    const newArtist = artists.filter(artist => artist.id !==id)
 
-    fs.writeFile("data.json", JSON.stringify(newartists));
+    fs.writeFile("data.json", JSON.stringify(newArtist));
 
     response.json(artists);
 })
