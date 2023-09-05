@@ -1,7 +1,26 @@
-{
+[
+  {
     "name": "Rihanna",
     "birthday": "1990-01-01",
     "genre": "R&B",
     "latestAlbum": "Rihanna album",
-    "image": "image"
-}
+    "image": "Rihanna image",
+    "id": "281040568"
+  },
+  {
+    "name": "Bruno Mars",
+    "birthday": "1990-01-01",
+    "genre": "R&B",
+    "latestAlbum": "Bruno Mars album",
+    "image": "Bruno Mars image",
+    "id": "284192044"
+  },
+  {
+    "name": "Katy Perry",
+    "birthday": "1990-01-01",
+    "genre": "R&B",
+    "latestAlbum": "Katy Perry album",
+    "image": "Katy Perry image",
+    "id": "739148192"
+  }
+]

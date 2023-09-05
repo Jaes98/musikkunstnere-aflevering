@@ -19,16 +19,11 @@ app.get("/", (request, response) => {
     response.send("Velkommen");
 });
 
-app.get("/test", (request, response) =>  {
-    response.send("siuu");
-});
-
 app.get("/artists", async (request, response) => {
     const data = await fs.readFile("data.json");
     const artists = JSON.parse(data)
     console.log(artists);
 
-    // sorterer listen der bliver sendt tilbage til frontenden
     artists.sort((a, b) => a.name.localeCompare(b.name));
     if (!artists) {
         return res.status(400).json({ error: "User already exists" });
