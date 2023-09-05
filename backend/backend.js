@@ -1,86 +1,92 @@
-// import express from "express";
-// import fs from "fs/promises";
-// import cors from "cors";
-// import { log } from "console";
+// -- Imports --
+import express from "express";
+import fs from "fs/promises";
+import cors from "cors";
 
-// const app = express();
-// const port = 3333;
+const app = express();
+const port = 3333;
 
-// app.use(express.json())
-// app.use(cors());
+app.use(express.json())
+app.use(cors());
+// app.use(())
 
-// app.listen(port, () => {
-//     console.log(`App running on http://localhost;${port}`);
-// });
+app.listen(port, () => {
+    console.log(`App running on http://localhost;${port}`);
+});
 
-// app.get("/", (request, response) => {
-//     response.send("Xatures er tilbage guys");
-// });
+// -- REST Ruter --
+app.get("/", (request, response) => {
+    response.send("Velkommen");
+});
 
-// app.get("/test", (request, response) =>  {
-//     response.send("siuu");
-// });
+app.get("/test", (request, response) =>  {
+    response.send("siuu");
+});
 
-// app.get("/users", async (request, response) => {
-//     const data = await fs.readFile("data.json");
-//     const users = JSON.parse(data)
-//     console.log(users);
+app.get("/artists", async (request, response) => {
+    const data = await fs.readFile("data.json");
+    const artists = JSON.parse(data)
+    console.log(artists);
 
-//     users.sort((a, b) => a.name.localeCompare(b.name));
-    
-//     response.json(users)
-// });
+    // sorterer listen der bliver sendt tilbage til frontenden
+    artists.sort((a, b) => a.name.localeCompare(b.name));
+    if (!artists) {
+        return res.status(400).json({ error: "User already exists" });
+    } else {
+         response.json(artists)
+    } 
+})
+app.post("/artists", async (request, response) => {
+    const newArtists = request.body;
+    newArtists.id = new Date().getTime();
+    console.log(newArtists);
 
-// app.post("/users", async (request, response) => {
-//     const newUser = request.body;
-//     newUser.id = new Date().getTime();
-//     console.log(newUser);
+    const data = await fs.readFile("data.json");
+    const artists = JSON.parse(data)
 
-//     const data = await fs.readFile("data.json");
-//     const users = JSON.parse(data)
+    artists.push(newArtists);
+    console.log(newArtists);
 
-//     users.push(newUser);
-//     console.log(newUser);
+    fs.writeFile("data.json", JSON.stringify(artists));
 
-//     fs.writeFile("data.json", JSON.stringify(users));
+    response.json(artists);
+});
 
-//     response.json(users);
-// });
+app.patch("/artists/:id", async (request, response) => {
+    const id = Number(request.params.id);
+    console.log(id);
 
-// app.put("/users/:id", async (request, response) => {
-//     const id = Number(request.params.id);
-//     console.log(id);
+    const data = await fs.readFile("data.json");
+    const artists = JSON.parse(data);
 
-//     const data = await fs.readFile("data.json");
-//     const users = JSON.parse(data);
+    let artistToUpdate = artists.find(artist => artist.id === id)
 
-//     let userToUpdate = users.find(user => user.id === id)
+    const body = request.body;
+    console.log(body);
+    artistToUpdate.name = body.name;
+    artistToUpdate.birthday = body.birthday;
+    artistToUpdate.genre = body.genre
+    artistToUpdate.latestAlbum = body.latestAlbum
+    artistToUpdate.image = body.image;
 
-//     const body = request.body;
-//     console.log(body);
-//     userToUpdate.image = body.image;
-//     userToUpdate.mail = body.mail;
-//     userToUpdate.name = body.name;
-//     userToUpdate.title = body.title;
+    fs.writeFile("data.json", JSON.stringify(artists));
+    response.json(artists);
 
-//     fs.writeFile("data.json", JSON.stringify(users));
-//     response.json(users);
+})
 
-// })
+app.delete("/artists/:id", async (request, response) => {
+    const id = Number(request.params.id);
+    console.log(id);
 
-// app.delete("/users/:id", async (request, response) => {
-//     const id = Number(request.params.id);
-//     console.log(id);
+    const data = await fs.readFile("data.json");
+    const artists = JSON.parse(data);
 
-//     const data = await fs.readFile("data.json");
-//     const users = JSON.parse(data);
+    const newartists = artists.filter(artist => artist.id !==id)
 
-//     const newUsers = users.filter(user => user.id !==id)
+    fs.writeFile("data.json", JSON.stringify(newartists));
 
-//     fs.writeFile("data.json", JSON.stringify(newUsers));
-
-//     response.json(users);
-// })
+    response.json(artists);
+})
 
 
 
