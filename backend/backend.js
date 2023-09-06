@@ -82,20 +82,23 @@ app.put("/artists/:id", async (request, response) => {
   let artistToUpdate = artists.find((artist) => artist.id === id);
   console.log(artistToUpdate);
 
+  if (!artistToUpdate) {
+    return response.status(404).json({ error: "Artist not found" });
+  }
+
   const body = request.body;
   console.log(body);
   artistToUpdate.name = body.name;
-  artistToUpdate.birthday = body.birthday;
-  artistToUpdate.genre = body.genre;
-  artistToUpdate.latestAlbum = body.latestAlbum;
   artistToUpdate.image = body.image;
+  artistToUpdate.birthdate = body.birthdate;
+  artistToUpdate.activeSince = body.activeSince;
+  artistToUpdate.genres = body.genres;
+  artistToUpdate.labels = body.labels;
+  artistToUpdate.website = body.website;
+  artistToUpdate.shortDescription = body.shortDescription;
 
-  fs.writeFile("data.json", JSON.stringify(artists));
-  if (!artistToUpdate) {
-    return response.status(404).json({ error: "Artist not found" });
-  } else {
-    response.json(artists);
-  }
+  await fs.writeFile("data.json", JSON.stringify(artists));
+  response.json(artists);
 });
 
 app.delete("/artists/:id", async (request, response) => {
