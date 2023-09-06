@@ -6,19 +6,27 @@ let listOfArtists;
 
 window.addEventListener("load", initApp);
 
-async function initApp(params) {
+async function initApp(array) {
   console.log("kører den?");
-  listOfArtists = [];
-  updateArtistsGrid();
+  const artists = await getArtists();
+    listOfArtists = artists;
+    updateArtistsGrid(artists);
+    eventListenersAdd();
+}
 
-  document.querySelector("#form-create").addEventListener("submit", createArtist);
-  document.querySelector("#form-update").addEventListener("submit", updateArtist);
+function eventListenersAdd(params) {
+  document
+    .querySelector("#form-create")
+    .addEventListener("submit", createArtist);
+  document
+    .querySelector("#form-update")
+    .addEventListener("submit", updateArtist);
   document.querySelector("#sort-by").addEventListener("change", setSort);
   document.querySelector("#filter-by").addEventListener("change", chosenFilter);
 }
-async function updateArtistsGrid() {
-  const artists = await getArtists();
-  displayArtists(artists);
+async function updateArtistsGrid(list) {
+  console.log(list, "det her sendes til display");
+  displayArtists(list);
 }
 
 async function getArtists(params) {
@@ -28,7 +36,6 @@ async function getArtists(params) {
 }
 
 function displayArtists(artistList) {
-  
   // reset <section id="artists-grid" class="grid-container">...</section>
   document.querySelector("#artists-grid").innerHTML = "";
   //loop through all artists and create an article with content for each
@@ -162,16 +169,18 @@ async function deleteArtist(id) {
 }
 
 /* Sortering & Filtrering */
-
-function showArtistsAll() {
-  const listOfAll = listOfArtists;
+async function showArtistsAll() {
+  const listOfAll = await getArtists();
+ console.log(listOfAll, "liste til filter&sort her");
   const sortedList = sortArtists(listOfAll);
+  console.log(sortedList, "sorteret liste her");
   const filteredList = filterList(sortedList);
+  console.log(filteredList, "filtered liste her");
   // if (filteredList.length === 0) {
   //   const noResultsHtml = /* html */ `<p>Ingen resultater fundet.</p>`;
   //   document.querySelector("#artists-grid").innerHTML = noResultsHtml;
   // } else 
-  displayArtists(filteredList);
+  updateArtistsGrid(filteredList);
 }
 
 let valueToSortBy = "";
@@ -186,22 +195,22 @@ function chosenFilter() {
 }
 
 // Sortering
-function sortArtists(listOfArtists, sortBy) {
+function sortArtists(listOfArtists) {
   console.log("sorterer vi?");
-  if (sortBy === "") {
+  if (valueToSortBy === "") {
     return listOfArtists;
   }
-  if (sortBy === "name") {
+  if (valueToSortBy === "name") {
     return listOfArtists.sort((artistA, artistB) =>
       artistA.name.localeCompare(artistB.name)
     );
   }
-  if (sortBy === "birthdate") {
+  if (valueToSortBy === "birthdate") {
     return listOfArtists.sort((artistA, artistB) =>
       artistA.birthdate.localeCompare(artistB.birthdate)
     );
   }
-  if (sortBy === "activeSince") {
+  if (valueToSortBy === "activeSince") {
     return listOfArtists.sort((artistA, artistB) =>
       artistA.activeSince.localeCompare(artistB.activeSince)
     );
@@ -209,6 +218,7 @@ function sortArtists(listOfArtists, sortBy) {
 }
 
 function filterList(sortedList) {
+
   if (valueToFilterBy === "") return sortedList;
   if (valueToFilterBy === "Pop")
     return sortedList.filter((artist) =>
