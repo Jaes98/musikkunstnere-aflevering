@@ -96,3 +96,41 @@ footer {
 .update-btn:hover {
     background-color: rgb(62, 62, 62);
 }
+
+.tools-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tools-grid select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  width: 200px;
+  margin-right: 10px;
+}
+
+#checkbox-favorites {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  color: #333;
+  cursor: pointer;
+}
+
+#favoritesCheckBox {
+  margin-right: 5px;
+}
+
+#input-search {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  width: 200px;
+}

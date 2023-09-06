@@ -1,1 +1,57 @@
-[{"name":"Rihanna","birthdate":"20-02-1988","activeSince":"2003","genres":"Reggae, Pop","labels":"Def Jam Recordings, Universal Music Group, Roc Nation, SRP Records","website":"http://www.rihannanow.com/","shortDescription":"Rihanna, byname of Robyn Rihanna Fenty, (born February 20, 1988, St. Michael parish, Barbados), Barbadian pop and rhythm-and-blues (R&B) singer who became a worldwide star in the early 21st century, known for her distinctive and versatile voice and for her fashionable appearance.","image":"https://upload.wikimedia.org/wikipedia/commons/7/7a/Rihanna_-_2023_Met_Gala.png","id":281040568},{"name":"Bruno Mars","birthdate":"08-10-1985","activeSince":"2004","genres":"Reggae","labels":"Atlantic Records, Motown Records","website":"https://www.brunomars.com/","shortDescription":"Bruno Mars, byname of Peter Gene Hernandez, (born October 8, 1985, Honolulu, Hawaii, U.S.), American singer and songwriter who was known for both his catchy pop music—which often featured upbeat lyrics, blended different genres, and had a retro quality—and his energetic live performances.","image":"https://upload.wikimedia.org/wikipedia/commons/e/e1/Bruno_Mars.jpg_by_LXT_production.jpg","id":284192044},{"name":"Katy Perry","birthdate":"25-10-1984","activeSince":"2001","genres":"Pop","labels":"Capitol Records, Interscope Records, Columbia Records, Island Records","website":"https://www.katyperry.com/","shortDescription":"Katy Perry, original name Katheryn Elizabeth Hudson, (born October 25, 1984, Santa Barbara, California, U.S.), American pop singer who gained fame for a string of anthemic and often sexually suggestive hit songs, as well as for a playfully cartoonish sense of style.","image":"https://upload.wikimedia.org/wikipedia/commons/e/e3/Katy_Perry_em_Michigan.JPG","id":739148192},{"name":"Eminem","birthdate":"17-10-1972","activeSince":"1988","genres":"Rap, Hiphop","labels":"Shady Records, Interscope Records, Aftermath Entertainment","website":"https://www.eminem.com/","shortDescription":"Eminem, byname of Marshall Bruce Mathers III, (born October 17, 1972, St. Joseph, Missouri, U.S.), American rapper, record producer, and actor who was known as one of the most-controversial and best-selling artists of the early 21st century. Mathers had a turbulent childhood, marked by poverty and allegations of abuse.","image":"https://upload.wikimedia.org/wikipedia/commons/9/92/Eminem_-_Concert_for_Valor_in_Washington%2C_D.C._Nov._11%2C_2014.jpg","id":739148933},{"name":"Travis Scott","birthdate":"30-04-1991","activeSince":"2008","genres":"Rap, Hiphop","labels":"Cactus Jack Records","website":"https://www.travisscott.com/","shortDescription":"Jacques Berman Webster II (born April 30, 1992), known professionally as Travis Scott (formerly stylized as Travi$ Scott), is an American rapper, singer, songwriter, and record producer. Scott's musical style has been described as a fusion of traditional hip hop, lo-fi and ambient.","image":"https://upload.wikimedia.org/wikipedia/commons/3/3c/Travis_Scott_The_DAMN._Tour_%28cropped%29.jpg","id":739143512}]
+[
+  {
+    "name": "Rihanna",
+    "birthdate": "20-02-1988",
+    "activeSince": "2003",
+    "genres": "Reggae, Pop, R&B",
+    "labels": "Def Jam Recordings, Universal Music Group, Roc Nation, SRP Records",
+    "website": "http://www.rihannanow.com/",
+    "shortDescription": "Rihanna, byname of Robyn Rihanna Fenty, (born February 20, 1988, St. Michael parish, Barbados), Barbadian pop and rhythm-and-blues (R&B) singer who became a worldwide star in the early 21st century, known for her distinctive and versatile voice and for her fashionable appearance.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Rihanna_-_2023_Met_Gala.png",
+    "id": 281040568
+  },
+  {
+    "name": "Bruno Mars",
+    "birthdate": "08-10-1985",
+    "activeSince": "2004",
+    "genres": "Reggae, R&B",
+    "labels": "Atlantic Records, Motown Records",
+    "website": "https://www.brunomars.com/",
+    "shortDescription": "Bruno Mars, byname of Peter Gene Hernandez, (born October 8, 1985, Honolulu, Hawaii, U.S.), American singer and songwriter who was known for both his catchy pop music—which often featured upbeat lyrics, blended different genres, and had a retro quality—and his energetic live performances.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Bruno_Mars.jpg_by_LXT_production.jpg",
+    "id": 284192044
+  },
+  {
+    "name": "Katy Perry",
+    "birthdate": "25-10-1984",
+    "activeSince": "2001",
+    "genres": "Pop",
+    "labels": "Capitol Records, Interscope Records, Columbia Records, Island Records",
+    "website": "https://www.katyperry.com/",
+    "shortDescription": "Katy Perry, original name Katheryn Elizabeth Hudson, (born October 25, 1984, Santa Barbara, California, U.S.), American pop singer who gained fame for a string of anthemic and often sexually suggestive hit songs, as well as for a playfully cartoonish sense of style.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Katy_Perry_em_Michigan.JPG",
+    "id": 739148192
+  },
+  {
+    "name": "Eminem",
+    "birthdate": "17-10-1972",
+    "activeSince": "1988",
+    "genres": "Rap, Hiphop",
+    "labels": "Shady Records, Interscope Records, Aftermath Entertainment",
+    "website": "https://www.eminem.com/",
+    "shortDescription": "Eminem, byname of Marshall Bruce Mathers III, (born October 17, 1972, St. Joseph, Missouri, U.S.), American rapper, record producer, and actor who was known as one of the most-controversial and best-selling artists of the early 21st century. Mathers had a turbulent childhood, marked by poverty and allegations of abuse.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/9/92/Eminem_-_Concert_for_Valor_in_Washington%2C_D.C._Nov._11%2C_2014.jpg",
+    "id": 739148933
+  },
+  {
+    "name": "Travis Scott",
+    "birthdate": "30-04-1991",
+    "activeSince": "2008",
+    "genres": "Rap, Hiphop",
+    "labels": "Cactus Jack Records",
+    "website": "https://www.travisscott.com/",
+    "shortDescription": "Jacques Berman Webster II (born April 30, 1992), known professionally as Travis Scott (formerly stylized as Travi$ Scott), is an American rapper, singer, songwriter, and record producer. Scott's musical style has been described as a fusion of traditional hip hop, lo-fi and ambient.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Travis_Scott_The_DAMN._Tour_%28cropped%29.jpg",
+    "id": 739143512
+  }
+]

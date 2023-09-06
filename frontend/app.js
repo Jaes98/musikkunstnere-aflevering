@@ -2,14 +2,19 @@
 
 const artistDatabase = "http://localhost:3333";
 let selectedArtist;
+let listOfArtists;
 
 window.addEventListener("load", initApp);
 
 async function initApp(params) {
+  console.log("kører den?");
+  listOfArtists = [];
   updateArtistsGrid();
 
-    document.querySelector("#form-create").addEventListener("submit", createArtist);
-    document.querySelector("#form-update").addEventListener("submit", updateArtist);
+  document.querySelector("#form-create").addEventListener("submit", createArtist);
+  document.querySelector("#form-update").addEventListener("submit", updateArtist);
+  document.querySelector("#sort-by").addEventListener("change", setSort);
+  document.querySelector("#filter-by").addEventListener("change", chosenFilter);
 }
 async function updateArtistsGrid() {
   const artists = await getArtists();
@@ -23,6 +28,7 @@ async function getArtists(params) {
 }
 
 function displayArtists(artistList) {
+  
   // reset <section id="artists-grid" class="grid-container">...</section>
   document.querySelector("#artists-grid").innerHTML = "";
   //loop through all artists and create an article with content for each
@@ -46,7 +52,7 @@ function displayArtists(artistList) {
     );
     document
       .querySelector("#artists-grid article:last-child .delete-btn")
-      .addEventListener("click", () => deleteArtistClicked(artist.id));
+      .addEventListener("click", () => deleteArtist(artist.id));
     document
       .querySelector("#artists-grid article:last-child .update-btn")
       .addEventListener("click", () => selectArtist(artist));
@@ -125,24 +131,27 @@ async function updateArtist(event) {
     shortDescription,
   };
   const artistAsJson = JSON.stringify(artistToUpdate);
-  const response = await fetch(`${artistDatabase}/artists/${selectedArtist.id}`, {
-    method: "PUT",
-    body: artistAsJson,
-    headers: {
-      "Content-type": "application/json",
-    },
-  });
+  const response = await fetch(
+    `${artistDatabase}/artists/${selectedArtist.id}`,
+    {
+      method: "PUT",
+      body: artistAsJson,
+      headers: {
+        "Content-type": "application/json",
+      },
+    }
+  );
   if (response.ok) {
     updateArtistsGrid();
   }
 }
 
 // ================== DELETE ============ //
-function deleteArtistClicked(artist) {
-  if (window.confirm("Are you sure you want to remove this artist?")) {
-    deleteArtist(artist);
-  }
-}
+// function deleteArtistClicked(artist) {
+//   if (window.confirm("Are you sure you want to remove this artist?")) {
+//     deleteArtist(artist);
+//   }
+// }
 async function deleteArtist(id) {
   const response = await fetch(`${artistDatabase}/artists/${id}`, {
     method: "DELETE",
@@ -150,4 +159,77 @@ async function deleteArtist(id) {
   if (response.ok) {
     updateArtistsGrid();
   }
+}
+
+/* Sortering & Filtrering */
+
+function showArtistsAll() {
+  const listOfAll = listOfArtists;
+  const sortedList = sortArtists(listOfAll);
+  const filteredList = filterList(sortedList);
+  // if (filteredList.length === 0) {
+  //   const noResultsHtml = /* html */ `<p>Ingen resultater fundet.</p>`;
+  //   document.querySelector("#artists-grid").innerHTML = noResultsHtml;
+  // } else 
+  displayArtists(filteredList);
+}
+
+let valueToSortBy = "";
+function setSort() {
+  valueToSortBy = document.querySelector("#sort-by").value;
+  showArtistsAll();
+}
+let valueToFilterBy = "";
+function chosenFilter() {
+  valueToFilterBy = document.querySelector("#filter-by").value;
+  showArtistsAll();
+}
+
+// Sortering
+function sortArtists(listOfArtists, sortBy) {
+  console.log("sorterer vi?");
+  if (sortBy === "") {
+    return listOfArtists;
+  }
+  if (sortBy === "name") {
+    return listOfArtists.sort((artistA, artistB) =>
+      artistA.name.localeCompare(artistB.name)
+    );
+  }
+  if (sortBy === "birthdate") {
+    return listOfArtists.sort((artistA, artistB) =>
+      artistA.birthdate.localeCompare(artistB.birthdate)
+    );
+  }
+  if (sortBy === "activeSince") {
+    return listOfArtists.sort((artistA, artistB) =>
+      artistA.activeSince.localeCompare(artistB.activeSince)
+    );
+  }
+}
+
+function filterList(sortedList) {
+  if (valueToFilterBy === "") return sortedList;
+  if (valueToFilterBy === "Pop")
+    return sortedList.filter((artist) =>
+      artist.genres.includes(valueToFilterBy)
+    );
+  else if (valueToFilterBy === "Rap")
+    return sortedList.filter((artist) =>
+      artist.genres.includes(valueToFilterBy)
+    );
+  else if (valueToFilterBy === "Reggae")
+    return sortedList.filter((artist) =>
+      artist.genres.includes(valueToFilterBy)
+    );
+  else if (valueToFilterBy === "Hiphop")
+    return sortedList.filter((artist) =>
+      artist.genres.includes(valueToFilterBy)
+    );
+  else if (valueToFilterBy === "R&B")
+    return sortedList.filter((artist) =>
+      artist.genres.includes(valueToFilterBy)
+    );
+  else
+    return sortedList
 }

@@ -12,6 +12,29 @@
       <h1>Some oldschool artists and the legend Travis Scott</h1>
     </header>
     <main>
+      <section class="tools-grid">
+			<select id="sort-by">
+				<option value="" selected disabled>Choose sort</option>
+				<option value="name">Name</option>
+				<option value="birthdate">Age</option>
+				<option value="activeSince">Active since</option>
+			</select>
+			<select id="filter-by">
+				<option value="" selected>No filter</option>
+				<option value="Pop">Pop</option>
+				<option value="Hip-hop">Hip-hop</option>
+				<option value="R&B">R&B</option>
+				<option value="Rap">Rap</option>
+				<option value="Reggae">Raggae</option>
+			</select>
+			<section id="favorites">
+				<label for="checkbox-favorites" id="checkbox-favorites">
+					Favorites only
+					<input type="checkbox" id="favoritesCheckBox" />
+				</label>
+				<!-- <input id="input-search" type="search" placeholder="Search by name" /> -->
+			</section>
+		</section>
       <section id="artists-grid" class="grid-container"></section>
       <form id="form-create">
         <h2>Create a new Artist</h2>
@@ -53,5 +76,5 @@
   <footer>
     <p>Made by Marcus</p>
   </footer>
-  <script src="app.js"></script>
+  <script src="./app.js" type="module"></script>
 </html>
