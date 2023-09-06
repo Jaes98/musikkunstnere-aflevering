@@ -8,8 +8,8 @@ window.addEventListener("load", initApp);
 async function initApp(params) {
   updateArtistsGrid();
 
-  //   document.querySelector("#form-create").addEventListener("submit", createArtist);
-  //   document.querySelector("#form-update").addEventListener("submit", updateArtist);
+    document.querySelector("#form-create").addEventListener("submit", createArtist);
+    document.querySelector("#form-update").addEventListener("submit", updateArtist);
 }
 async function updateArtistsGrid() {
   const artists = await getArtists();
@@ -46,7 +46,7 @@ function displayArtists(artistList) {
     );
     document
       .querySelector("#artists-grid article:last-child .delete-btn")
-      .addEventListener("click", () => deleteArtist(artist.id));
+      .addEventListener("click", () => deleteArtistClicked(artist.id));
     document
       .querySelector("#artists-grid article:last-child .update-btn")
       .addEventListener("click", () => selectArtist(artist));
@@ -74,7 +74,7 @@ async function createArtist(event) {
     shortDescription,
   };
   const artistAsJson = JSON.stringify(newArtist);
-  const response = await fetch(`${endpoint}/artists`, {
+  const response = await fetch(`${artistDatabase}/artists`, {
     method: "POST",
     body: artistAsJson,
     headers: {
@@ -125,7 +125,7 @@ async function updateArtist(event) {
     shortDescription,
   };
   const artistAsJson = JSON.stringify(artistToUpdate);
-  const response = await fetch(`${endpoint}/artists/${selectedArtist.id}`, {
+  const response = await fetch(`${artistDatabase}/artists/${selectedArtist.id}`, {
     method: "PUT",
     body: artistAsJson,
     headers: {
@@ -138,8 +138,13 @@ async function updateArtist(event) {
 }
 
 // ================== DELETE ============ //
+function deleteArtistClicked(artist) {
+  if (window.confirm("Are you sure you want to remove this artist?")) {
+    deleteArtist(artist);
+  }
+}
 async function deleteArtist(id) {
-  const response = await fetch(`${endpoint}/artists/${id}`, {
+  const response = await fetch(`${artistDatabase}/artists/${id}`, {
     method: "DELETE",
   });
   if (response.ok) {
