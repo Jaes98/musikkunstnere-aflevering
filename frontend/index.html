@@ -1,14 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Musik Kunstnere</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Velkommen</h1>
-</body>
-<script src="app.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Musik Kunstnere Aflevering</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Some oldschool artists and the legend Travis Scott</h1>
+    </header>
+    <main>
+      <section id="artists-grid" class="grid-container"></section>
+      <form id="form-create">
+        <h2>Create a new Artist</h2>
+        <input type="text" name="name" placeholder="Type your name" required />
+        <input type="text" name="birthdate" placeholder="dd-mm-yyyy" required />
+        <input type="text" name="activeSince" placeholder="yyyy" required />
+        <input type="text" name="genres" placeholder="Genres" required />
+        <input type="text" name="labels" placeholder="Labels" required />
+        <input type="url" name="website" placeholder="Artist URL here" />
+        <input type="url" name="image" placeholder="Image URL here" required />
+        <input
+          type="text"
+          name="shortDescription"
+          placeholder="Describe artist"
+          required
+        />
+        <button>Create Artist</button>
+      </form>
+
+      <form id="form-update">
+        <h2>Update Artist</h2>
+        <input type="text" name="name" placeholder="Type your name" required />
+        <input type="text" name="birthdate" placeholder="dd-mm-yyyy" required />
+        <input type="text" name="activeSince" placeholder="yyyy" required />
+        <input type="text" name="genres" placeholder="Genres" required />
+        <input type="text" name="labels" placeholder="Labels" required />
+        <input type="url" name="website" placeholder="Artist URL here" />
+        <input type="url" name="image" placeholder="Image URL here" required />
+        <input
+          type="text"
+          name="shortDescription"
+          placeholder="Describe artist"
+          required
+        />
+        <button>Update Artist</button>
+      </form>
+    </main>
+  </body>
+  <footer>
+    <p>Made by Marcus</p>
+  </footer>
+  <script src="app.js"></script>
 </html>
