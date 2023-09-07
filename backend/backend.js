@@ -21,10 +21,9 @@ app.get("/", (request, response) => {
 
 
 app.get("/artists", async (request, response) => {
-  const data = await fs.readFile("data.json");
-  const artists = JSON.parse(data);
+  const artists = getArtists();
 
-  if (!data) {
+  if (!artists) {
     response.status(400).json({ error: "Artists can't be found" });
   } else {
     response.json(artists);
@@ -32,12 +31,11 @@ app.get("/artists", async (request, response) => {
 });
 
 app.get("/artists/:id", async (request, response) => {
-  const data = await fs.readFile("data.json");
-  const artists = JSON.parse(data);
+  const artists = getArtists();
   console.log("Artists er fetched");
 
 
-  if (!data) {
+  if (!artists) {
     response.status(400).json({ error: "Artists can't be found" });
   } else {
     const id = Number(request.params.id);
@@ -51,15 +49,13 @@ app.post("/artists", async (request, response) => {
   const newArtist = request.body;
   newArtist.id = new Date().getTime();
 
-  const data = await fs.readFile("data.json");
-  const artists = JSON.parse(data);
+  const artists = getArtists();
 
   artists.push(newArtist);
 
-//   fs.writeFile(".backend/data/data.json", JSON.stringify(artists));
       try {
         await fs.writeFile("data.json", JSON.stringify(artists));
-        response.json(artists);
+        response.json(artists);$
       } catch (err) {
         response.status(500).json({error: "Server could'nt handle"})
         console.error("Error writing to file:", err);
@@ -71,8 +67,7 @@ app.put("/artists/:id", async (request, response) => {
   const id = Number(request.params.id);
   console.log(id, "id på specifikt artist til PUT");
 
-  const data = await fs.readFile("data.json");
-  const artists = JSON.parse(data);
+  const artists = getArtists();
 
   let artistToUpdate = artists.find((artist) => artist.id === id);
 
@@ -97,8 +92,7 @@ app.put("/artists/:id", async (request, response) => {
 app.delete("/artists/:id", async (request, response) => {
   const id = Number(request.params.id);
   console.log(id, "specifik artist id delete");
-  const data = await fs.readFile("data.json");
-  const artists = JSON.parse(data);
+  const artists = getArtists();
   const newArtist = artists.filter((artist) => artist.id !== id);
   fs.writeFile("data.json", JSON.stringify(newArtist));
   if (!newArtist) {
@@ -135,19 +129,6 @@ app.post("/favorites", async (request, response) => {
   const listOfFavorites = artists.filter((artist) => favorites.includes(artist.id));
   response.json(listOfFavorites)
 });
-// app.post("/favorites", async (request, response) => {
-//   const favID = request.body.id;
-//   const favs = await getFavorites();
-
-//   if (!favs.includes(favID)) {
-//     favs.push(favID);
-//     writeFavorites(favs);
-//   }
-
-//   const artists = await getArtists();
-//   const favorites = artists.filter((artist) => favs.includes(artist.id));
-//   response.json(favorites);
-// });
 
 // -- delete rute til favorites --
 app.delete("/favorites/:id", async (request, response) => {
@@ -167,11 +148,12 @@ app.delete("/favorites/:id", async (request, response) => {
   }
 });
 
+// Helperfunctions til backend
 async function getArtists() {
   const data = await fs.readFile("data.json");
   return JSON.parse(data);
 }
 async function getFavorites() {
-	const data = await fs.readFile("favorites.json");
-	return JSON.parse(data);
+  const data = await fs.readFile("favorites.json");
+  return JSON.parse(data);
 }
