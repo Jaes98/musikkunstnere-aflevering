@@ -14,7 +14,7 @@ app.listen(port, () => {
   console.log(`App running on http://localhost;${port}`);
 });
 
-// -- REST Ruter --
+// -- REST Ruter til artists --
 app.get("/", (request, response) => {
   response.send("Velkommen");
 });
@@ -23,7 +23,6 @@ app.get("/", (request, response) => {
 app.get("/artists", async (request, response) => {
   const data = await fs.readFile("data.json");
   const artists = JSON.parse(data);
-  console.log(artists);
 
   if (!data) {
     response.status(400).json({ error: "Artists can't be found" });
@@ -35,8 +34,7 @@ app.get("/artists", async (request, response) => {
 app.get("/artists/:id", async (request, response) => {
   const data = await fs.readFile("data.json");
   const artists = JSON.parse(data);
-  console.log("kører vi?");
-  console.log(artists);
+  console.log("Artists er fetched");
 
 
   if (!data) {
@@ -52,15 +50,13 @@ app.get("/artists/:id", async (request, response) => {
 app.post("/artists", async (request, response) => {
   const newArtist = request.body;
   newArtist.id = new Date().getTime();
-  console.log(newArtist);
 
   const data = await fs.readFile("data.json");
   const artists = JSON.parse(data);
 
   artists.push(newArtist);
-  console.log(newArtist);
 
-//   fs.writeFile("data.json", JSON.stringify(artists));
+//   fs.writeFile(".backend/data/data.json", JSON.stringify(artists));
       try {
         await fs.writeFile("data.json", JSON.stringify(artists));
         response.json(artists);
@@ -73,21 +69,18 @@ app.post("/artists", async (request, response) => {
 
 app.put("/artists/:id", async (request, response) => {
   const id = Number(request.params.id);
-  console.log(id);
+  console.log(id, "id på specifikt artist til PUT");
 
   const data = await fs.readFile("data.json");
   const artists = JSON.parse(data);
-  console.log(artists);
 
   let artistToUpdate = artists.find((artist) => artist.id === id);
-  console.log(artistToUpdate);
 
   if (!artistToUpdate) {
     return response.status(404).json({ error: "Artist not found" });
   }
 
   const body = request.body;
-  console.log(body);
   artistToUpdate.name = body.name;
   artistToUpdate.image = body.image;
   artistToUpdate.birthdate = body.birthdate;
@@ -103,12 +96,10 @@ app.put("/artists/:id", async (request, response) => {
 
 app.delete("/artists/:id", async (request, response) => {
   const id = Number(request.params.id);
-  console.log(id);
+  console.log(id, "specifik artist id delete");
   const data = await fs.readFile("data.json");
   const artists = JSON.parse(data);
   const newArtist = artists.filter((artist) => artist.id !== id);
-  console.log(artists);
-  console.log(newArtist);
   fs.writeFile("data.json", JSON.stringify(newArtist));
   if (!newArtist) {
     response.status(404).json({ error: "Artist not found" });
@@ -116,3 +107,71 @@ app.delete("/artists/:id", async (request, response) => {
     response.json(newArtist);
   }
 });
+
+
+// -- Rest ruter til favorites --
+
+// get request til favorites
+app.get("/favorites", async (request, response) => {
+  const favoriteIds = await getFavorites();
+  const artists = await getArtists();
+
+  const listFavorites = artists.filter((artist) => favoriteIds.includes(artist.id));
+
+  response.json(listFavorites)
+})
+
+// -- post rute til favorites --
+app.post("/favorites", async (request, response) => {
+  const favID = request.body.id;
+  const favorites = await getFavorites();
+
+  if (!favorites.includes(favID)) {
+    favorites.push(favID);
+    fs.writeFile("favorites.json",JSON.stringify(favorites));
+  }
+
+  const artists = await getArtists();
+  const listOfFavorites = artists.filter((artist) => favorites.includes(artist.id));
+  response.json(listOfFavorites)
+});
+// app.post("/favorites", async (request, response) => {
+//   const favID = request.body.id;
+//   const favs = await getFavorites();
+
+//   if (!favs.includes(favID)) {
+//     favs.push(favID);
+//     writeFavorites(favs);
+//   }
+
+//   const artists = await getArtists();
+//   const favorites = artists.filter((artist) => favs.includes(artist.id));
+//   response.json(favorites);
+// });
+
+// -- delete rute til favorites --
+app.delete("/favorites/:id", async (request, response) => {
+  const favId = Number(request.params.id);
+  const listOfFavorites = await getFavorites();
+
+  if (listOfFavorites.includes(favId)) {
+    const newFavs = listOfFavorites.filter((id) => id !== favId);
+    fs.writeFile("favorites.json", JSON.stringify(newFavs));
+
+    const artists = await getArtists();
+    const favorites = artists.filter((artist) => newFavs.includes(artist.id));
+
+    response.json(favorites);
+  } else {
+    response.status(404).json({ error: "Fejl i systemet" });
+  }
+});
+
+async function getArtists() {
+  const data = await fs.readFile("data.json");
+  return JSON.parse(data);
+}
+async function getFavorites() {
+	const data = await fs.readFile("favorites.json");
+	return JSON.parse(data);
+}

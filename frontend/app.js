@@ -1,19 +1,23 @@
 "use strict";
 
-const artistDatabase = "http://localhost:3333";
+import { createdArtist, updatedArtist, deleteArtist, getArtists, addToFavorite, removeFromFavorite, fetchFavorites } from "./http.js";
+
 let selectedArtist;
 let listOfArtists;
+let favoriteIds;
 
 window.addEventListener("load", initApp);
 
+// ============ Start app ============ //
 async function initApp(array) {
   console.log("kører den?");
   const artists = await getArtists();
-    listOfArtists = artists;
-    updateArtistsGrid(artists);
-    eventListenersAdd();
+  listOfArtists = artists;
+  updateArtistsGrid(artists);
+  eventListenersAdd();
 }
 
+// ============ Adds eventlisteners ============ //
 function eventListenersAdd(params) {
   document
     .querySelector("#form-create")
@@ -33,16 +37,9 @@ async function updateArtistsGrid(list) {
   displayArtists(list);
 }
 
-async function getArtists(params) {
-  const artistsFromDatabase = await fetch(`${artistDatabase}/artists`);
-  console.log(artistsFromDatabase);
-  return await artistsFromDatabase.json();
-}
-
+// ============ Shows artists on grid ============ //
 function displayArtists(artistList) {
-  // reset <section id="artists-grid" class="grid-container">...</section>
   document.querySelector("#artists-grid").innerHTML = "";
-  //loop through all artists and create an article with content for each
   for (const artist of artistList) {
     document.querySelector("#artists-grid").insertAdjacentHTML(
       "beforeend",
@@ -65,19 +62,22 @@ function displayArtists(artistList) {
     );
     document
       .querySelector("#artists-grid article:last-child .delete-btn")
-      .addEventListener("click", () => deleteArtist(artist.id));
+      .addEventListener("click", () => deleteArtistClicked(artist.id));
     document
       .querySelector("#artists-grid article:last-child .update-btn")
       .addEventListener("click", () => selectArtist(artist));
       document
-        .querySelector("#artists article:last-child .btn-add")
+        .querySelector("#artists-grid article:last-child .addFavorites-btn")
         .addEventListener("click", () => addToFavorite(artist.id));
       document
-        .querySelector("#artists article:last-child .btn-remove")
+        .querySelector("#artists-grid article:last-child .removeFavorites-btn")
         .addEventListener("click", () => removeFromFavorite(artist.id));
   }
 }
-
+function displayFavoritesById(ids) {
+  
+}
+// ============ CREATE ============ //
 async function createArtist(event) {
   event.preventDefault();
   const name = event.target.name.value;
@@ -88,6 +88,7 @@ async function createArtist(event) {
   const labels = event.target.labels.value;
   const website = event.target.website.value;
   const shortDescription = event.target.shortDescription.value;
+  const favorite = false
   const newArtist = {
     name,
     image,
@@ -97,24 +98,44 @@ async function createArtist(event) {
     labels,
     website,
     shortDescription,
+    favorite
   };
-  const artistAsJson = JSON.stringify(newArtist);
-  const response = await fetch(`${artistDatabase}/artists`, {
-    method: "POST",
-    body: artistAsJson,
-    headers: {
-      "Content-type": "application/json",
-    },
-  });
-
+  const response = await createdArtist(newArtist);
   if (response.ok) {
     updateArtistsGrid();
   }
 }
-
 // ============ UPDATE ============ //
+async function updateArtist(event) {
+  event.preventDefault();
+  const name = event.target.name.value;
+  const image = event.target.image.value;
+  const birthdate = event.target.birthdate.value;
+  const activeSince = event.target.activeSince.value;
+  const genres = event.target.genres.value;
+  const labels = event.target.labels.value;
+  const website = event.target.website.value;
+  const shortDescription = event.target.shortDescription.value;
+  const favorite = event.target.favorite.checked
+  const artistToUpdate = {
+    name,
+    image,
+    birthdate,
+    activeSince,
+    genres,
+    labels,
+    website,
+    shortDescription,
+    favorite
+  };
+  const id = selectedArtist.id
+  console.log(id, "vis id på update target");
+  const response = await updatedArtist(artistToUpdate, id);
+  if (response.ok) {
+    updateArtistsGrid();
+  }
+}
 function selectArtist(artist) {
-  // Set global varaiable
   selectedArtist = artist;
   const form = document.querySelector("#form-update");
   form.name.value = artist.name;
@@ -128,59 +149,21 @@ function selectArtist(artist) {
   form.scrollIntoView({ behavior: "smooth" });
 }
 
-async function updateArtist(event) {
-  event.preventDefault();
-  const name = event.target.name.value;
-  const image = event.target.image.value;
-  const birthdate = event.target.birthdate.value;
-  const activeSince = event.target.activeSince.value;
-  const genres = event.target.genres.value;
-  const labels = event.target.labels.value;
-  const website = event.target.website.value;
-  const shortDescription = event.target.shortDescription.value;
-  // update artist
-  const artistToUpdate = {
-    name,
-    image,
-    birthdate,
-    activeSince,
-    genres,
-    labels,
-    website,
-    shortDescription,
-  };
-  const artistAsJson = JSON.stringify(artistToUpdate);
-  const response = await fetch(
-    `${artistDatabase}/artists/${selectedArtist.id}`,
-    {
-      method: "PUT",
-      body: artistAsJson,
-      headers: {
-        "Content-type": "application/json",
-      },
-    }
-  );
-  if (response.ok) {
-    updateArtistsGrid();
-  }
-}
-
 // ================== DELETE ============ //
-// function deleteArtistClicked(artist) {
-//   if (window.confirm("Are you sure you want to remove this artist?")) {
-//     deleteArtist(artist);
-//   }
-// }
-async function deleteArtist(id) {
-  const response = await fetch(`${artistDatabase}/artists/${id}`, {
-    method: "DELETE",
-  });
+function deleteArtistClicked(artistID) {
+
+  if (window.confirm("Are you sure you want to remove this artist?")) {
+    deleteArtistYes(artistID);
+  }
+}
+function deleteArtistYes(id) {
+  const response = deleteArtist(id);
   if (response.ok) {
     updateArtistsGrid();
   }
 }
 
-/* Sortering & Filtrering */
+// ============ Sortering og filtrering ============ //
 async function showArtistsAll() {
   const listOfAll = await getArtists();
  console.log(listOfAll, "liste til filter&sort her");
@@ -188,27 +171,16 @@ async function showArtistsAll() {
   console.log(sortedList, "sorteret liste her");
   const filteredList = filterList(sortedList);
   console.log(filteredList, "filtered liste her");
-  // if (filteredList.length === 0) {
-  //   const noResultsHtml = /* html */ `<p>Ingen resultater fundet.</p>`;
-  //   document.querySelector("#artists-grid").innerHTML = noResultsHtml;
-  // } else 
   updateArtistsGrid(filteredList);
 }
 
+// Sortering
 let valueToSortBy = "";
 function setSort() {
   valueToSortBy = document.querySelector("#sort-by").value;
   showArtistsAll();
 }
-let valueToFilterBy = "";
-function chosenFilter() {
-  valueToFilterBy = document.querySelector("#filter-by").value;
-  showArtistsAll();
-}
-
-// Sortering
 function sortArtists(listOfArtists) {
-  console.log("sorterer vi?");
   if (valueToSortBy === "") {
     return listOfArtists;
   }
@@ -219,8 +191,7 @@ function sortArtists(listOfArtists) {
   }
   if (valueToSortBy === "birthdate") {
     return listOfArtists.sort((artistA, artistB) =>
-      artistA.birthdate.localeCompare(artistB.birthdate)
-    );
+      new Date(artistA.birthdate).getTime() - new Date(artistB.birthdate).getTime());
   }
   if (valueToSortBy === "activeSince") {
     return listOfArtists.sort((artistA, artistB) =>
@@ -229,6 +200,12 @@ function sortArtists(listOfArtists) {
   }
 }
 
+// Filtrering
+let valueToFilterBy = "";
+function chosenFilter() {
+  valueToFilterBy = document.querySelector("#filter-by").value;
+  showArtistsAll();
+}
 function filterList(sortedList) {
 
   if (valueToFilterBy === "") return sortedList;
@@ -255,39 +232,20 @@ function filterList(sortedList) {
   else
     return sortedList
 }
-function favoritesClicked(event) {
+
+// ============ FAVORITES ============ //
+async function favoritesClicked(event) {
   const isChecked = event.target.checked;
   console.log(isChecked);
   if (isChecked) {
     displayArtists(favoriteIds);
   } else {
-    updateArtistsGrid();
+    const artists = await getArtists();
+    updateArtistsGrid(artists);
   }
 }
-// async function getFavorites() {
-//   const response = await fetch(`${endpoint}/favorites`);
-//   const data = await response.json();
-//   return data;
-// }
-
-// async function addToFavorite(id) {
-//   const newFav = {
-//     id: id,
-//   };
-//   const newFavAsJson = JSON.stringify(newFav);
-//   const response = await fetch(`${endpoint}/favorites`, {
-//     method: "POST",
-//     body: newFavAsJson,
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   return response;
-// }
-
-// async function removeFromFavorite(id) {
-//   const response = await fetch(`${endpoint}/favorites/${id}`, {
-//     method: "DELETE",
-//   });
-//   return response;
-// }
+async function getFavorites() {
+  const response = await fetchFavorites();
+  const data = await response.json();
+  return data;
+}
