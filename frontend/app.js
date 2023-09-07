@@ -23,9 +23,13 @@ function eventListenersAdd(params) {
     .addEventListener("submit", updateArtist);
   document.querySelector("#sort-by").addEventListener("change", setSort);
   document.querySelector("#filter-by").addEventListener("change", chosenFilter);
+  document
+    .querySelector("#favoritesCheckBox")
+    .addEventListener("change", favoritesClicked);
 }
 async function updateArtistsGrid(list) {
   console.log(list, "det her sendes til display");
+  favoriteIds = await getFavorites();
   displayArtists(list);
 }
 
@@ -54,6 +58,8 @@ function displayArtists(artistList) {
     <div><b>About the artist: </b>${artist.shortDescription}</div>
     <button class="update-btn">Update artist</button>
     <button class="delete-btn">Remove artist</button>
+    <button class="addFavorites-btn">Add to Favorites</button>
+		<button class="removeFavorites-btn">Remove from Favorites</button>
     </article>
         `
     );
@@ -63,6 +69,12 @@ function displayArtists(artistList) {
     document
       .querySelector("#artists-grid article:last-child .update-btn")
       .addEventListener("click", () => selectArtist(artist));
+      document
+        .querySelector("#artists article:last-child .btn-add")
+        .addEventListener("click", () => addToFavorite(artist.id));
+      document
+        .querySelector("#artists article:last-child .btn-remove")
+        .addEventListener("click", () => removeFromFavorite(artist.id));
   }
 }
 
@@ -243,3 +255,39 @@ function filterList(sortedList) {
   else
     return sortedList
 }
+function favoritesClicked(event) {
+  const isChecked = event.target.checked;
+  console.log(isChecked);
+  if (isChecked) {
+    displayArtists(favoriteIds);
+  } else {
+    updateArtistsGrid();
+  }
+}
+// async function getFavorites() {
+//   const response = await fetch(`${endpoint}/favorites`);
+//   const data = await response.json();
+//   return data;
+// }
+
+// async function addToFavorite(id) {
+//   const newFav = {
+//     id: id,
+//   };
+//   const newFavAsJson = JSON.stringify(newFav);
+//   const response = await fetch(`${endpoint}/favorites`, {
+//     method: "POST",
+//     body: newFavAsJson,
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   return response;
+// }
+
+// async function removeFromFavorite(id) {
+//   const response = await fetch(`${endpoint}/favorites/${id}`, {
+//     method: "DELETE",
+//   });
+//   return response;
+// }

@@ -97,14 +97,14 @@ footer {
     background-color: rgb(62, 62, 62);
 }
 
-.tools-grid {
+.nav-grid {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.tools-grid select {
+.nav-grid select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
